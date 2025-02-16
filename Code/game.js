@@ -625,7 +625,7 @@ function downloadGameData() {
 }
 
 document.getElementById("nextButton").addEventListener("click", function () {
-    if (this.textContent === "ラウンド終了") {
+    if (this.textContent == "ラウンド終了") {
         downloadGameData(); // データをダウンロード
         returnToStartScreen();
         p1_point = 0;
