@@ -20,6 +20,8 @@ let deck = [...elements, ...elements]
 let materials = []
 let imageCache = {}
 
+let recordData;
+
 //　load materials
 async function loadMaterials() {
     const response = await fetch('../compound/obs_standard_min.json')
@@ -598,24 +600,18 @@ window.onclick = function(event) {
 };
 
 function addGameData(p1NewHand, p1NewPoint, p2NewPoint, p1Dropped, p2Dropped) {
-    p1_hand = p1NewHand;
-    p1_point = p1NewPoint;
-    p2_point = p2NewPoint;
-    dropped_cards_p1 = p1Dropped;
-    dropped_cards_p2 = p2Dropped;
+    recordData.add(json.stringify({
+        p1_hand: p1NewHand,
+        p1_point: p1NewPoint,
+        p2_point: p2NewPoint,
+        dropped_cards_p1: p1Dropped,
+        dropped_cards_p2: p2Dropped,
+    }))
 }
 
 // Function to download game data
 function downloadGameData() {
-    const data = {
-        p1_point: p1_point,
-        p2_point: p2_point,
-        p1_hand: p1_hand,
-        dropped_cards_p1: dropped_cards_p1,
-        dropped_cards_p2: dropped_cards_p2,
-    };
-
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const blob = new Blob([recordData], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = "game_data.json";
