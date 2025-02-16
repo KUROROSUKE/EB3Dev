@@ -65,7 +65,7 @@ async function view_p2_hand() {
                 this.classList.remove("selected")
                 this.classList.add("selected")
                 let newElem = drawCard()
-                addGameData(p1_hand, p1_point, p2_point, dropped_cards_p1, dropped_cards_p2E)
+                addGameData(p1_hand, p1_point, p2_point, dropped_cards_p1, dropped_cards_p2)
                 this.src = imageCache[elementToNumber[newElem]].src
                 this.alt = newElem
                 this.style.padding = "5px"
