@@ -20,7 +20,7 @@ let deck = [...elements, ...elements]
 let materials = []
 let imageCache = {}
 
-let recordData;
+let exchange_history = []; // P2の交換データの履歴を保存
 
 //　load materials
 async function loadMaterials() {
@@ -67,12 +67,18 @@ async function view_p2_hand() {
                 this.classList.remove("selected")
                 this.classList.add("selected")
                 let newElem = drawCard()
-                addGameData(p1_hand, p1_point, p2_point, dropped_cards_p1, dropped_cards_p2)
                 this.src = imageCache[elementToNumber[newElem]].src
                 this.alt = newElem
                 this.style.padding = "5px"
                 this.style.border = "1px solid #000"
                 p2_hand[index] = newElem
+                exchange_history.push({
+                    dropped_cards_p2: [...dropped_cards_p2],
+                    dropped_cards_p1: [...dropped_cards_p1],
+                    p1_hand: [...p1_hand],
+                    p1_point: p1_point,
+                    p2_point: p2_point
+                });
                 turn = "p1"
                 setTimeout(() => {p1_action()},500)
             }
@@ -191,6 +197,10 @@ async function done(who, isRon = false) {
     // 小数点以下を四捨五入
     thisGame_p2_point = Math.round(thisGame_p2_point);
     thisGame_p1_point = Math.round(thisGame_p1_point);
+
+    exchange_history.push({
+        created_material: p2_make_material.a
+    });
 
     // 得点を更新
     p1_point += await thisGame_p1_point;
@@ -599,30 +609,31 @@ window.onclick = function(event) {
     }
 };
 
-function addGameData(p1NewHand, p1NewPoint, p2NewPoint, p1Dropped, p2Dropped) {
-    recordData.add(json.stringify({
-        p1_hand: p1NewHand,
-        p1_point: p1NewPoint,
-        p2_point: p2NewPoint,
-        dropped_cards_p1: p1Dropped,
-        dropped_cards_p2: p2Dropped,
-    }))
-}
-
-// Function to download game data
 function downloadGameData() {
-    const blob = new Blob([recordData], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "game_data.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    // JSONデータを文字列に変換
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exchange_history, null, 2));
+    
+    // ダウンロード用のリンクを作成
+    const downloadAnchor = document.createElement("a");
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", "game_data.json");
+    
+    // リンクをクリックしてダウンロードを開始
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    document.body.removeChild(downloadAnchor);
 }
 
 document.getElementById("nextButton").addEventListener("click", function () {
-    const button = document.getElementById("nextButton")
-    if (button.textContent === "ラウンド終了") {
-        downloadGameData();
+    if (this.textContent === "ラウンド終了") {
+        downloadGameData(); // データをダウンロード
+        returnToStartScreen();
+        p1_point = 0;
+        p2_point = 0;
+        numTurn = 0;
+        resetGame();
+        this.style.display = "none";
+        const newButton = this.cloneNode(true);
+        this.parentNode.replaceChild(newButton, this);
     }
 });
