@@ -65,7 +65,7 @@ async function view_p2_hand() {
                 this.classList.remove("selected")
                 this.classList.add("selected")
                 let newElem = drawCard()
-                addGameData(p1_hand, p1_point, p2_point, dropped_cards_p1, dropped_cards_p2)
+                addGameData(p1_hand, p1_point, p2_point, dropped_cards_p1, dropped_cards_p2E)
                 this.src = imageCache[elementToNumber[newElem]].src
                 this.alt = newElem
                 this.style.padding = "5px"
@@ -603,7 +603,6 @@ function addGameData(p1NewHand, p1NewPoint, p2NewPoint, p1Dropped, p2Dropped) {
     p2_point = p2NewPoint;
     dropped_cards_p1 = p1Dropped;
     dropped_cards_p2 = p2Dropped;
-    document.getElementById("p2_explain").innerText = lastP2Creation;
 }
 
 // Function to download game data
