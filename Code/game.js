@@ -211,7 +211,6 @@ async function done(who, isRon = false) {
     } else {
         console.log("ゲーム終了");
         button.textContent = "ラウンド終了";
-        downloadGameData();
         button.addEventListener("click", function () {
             resetGame();
             button.style.display = "none"
