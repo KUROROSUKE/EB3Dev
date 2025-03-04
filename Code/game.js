@@ -140,15 +140,15 @@ async function done(who, isRon = false) {
 
     if (who === "p1") {
         generated_p1 = p1_make_material[0].a;
-        generated_p2 = null;
+        generated_p2 = p2_make_material[0].a;
         generated_by = "p1";
     } else {
+        generated_p1 = p1_make_material[0].a;
         generated_p2 = p2_make_material[0].a;
-        generated_p1 = null;
         generated_by = "p2";
     }
     
-    logGameData();
+    await logGameData();
 
     dora = await get_dora();
     console.log(`ドラ: ${dora}`);
@@ -205,7 +205,7 @@ async function done(who, isRon = false) {
         button.addEventListener("click", function () {
             resetGame();
             button.style.display = "none"
-            const newButton = button.cloneNode(true);
+            newButton = button.cloneNode(true);
             button.parentNode.replaceChild(newButton, button);
         });
     } else {
@@ -215,7 +215,7 @@ async function done(who, isRon = false) {
         button.addEventListener("click", function () {
             resetGame();
             button.style.display = "none"
-            const newButton = button.cloneNode(true);
+            newButton = button.cloneNode(true);
             button.parentNode.replaceChild(newButton, button);
         });
     }
@@ -666,21 +666,17 @@ window.onclick = function(event) {
 };
 
 
-function logGameData() {
+async function logGameData() {
     p1_data_log.push({
-        point: p1_point,
-        hand: [...p1_hand],
         dropped: [...dropped_cards_p1],
         generated: generated_p1,
-        generated_by: generated_by === "p1" ? "p1" : null
+        generated_by: generated_by === "p1" ? true : false
     });
     
     p2_data_log.push({
-        point: p2_point,
-        hand: [...p2_hand],
         dropped: [...dropped_cards_p2],
         generated: generated_p2,
-        generated_by: generated_by === "p2" ? "p2" : null
+        generated_by: generated_by === "p2" ? true : false
     });
     
     console.log("P1 Data Log:", p1_data_log);
