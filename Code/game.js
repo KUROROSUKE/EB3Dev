@@ -267,7 +267,7 @@ async function p1_action() {
     }
     p1_is_acting = true;  // 行動開始
 
-    const highPointMaterials = materials.filter(material => material.c > 50);
+    const highPointMaterials = materials.filter(material => material.c > 10);
     const sortedMaterials = highPointMaterials.sort((a, b) => {
         let aMatchCount = Object.keys(a.d).reduce((count, elem) => count + Math.min(p1_hand.filter(e => e === elem).length, a.d[elem]), 0);
         let bMatchCount = Object.keys(b.d).reduce((count, elem) => count + Math.min(p1_hand.filter(e => e === elem).length, b.d[elem]), 0);
@@ -287,7 +287,7 @@ async function p1_action() {
             }
         }
 
-        if (canMake && targetMaterial.c > 50) {
+        if (canMake && targetMaterial.c > 10) {
             time = "make";
             await done("p1");
         } else {
