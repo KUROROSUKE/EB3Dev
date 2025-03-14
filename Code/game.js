@@ -31,7 +31,7 @@ let p2_data_log = [];
 
 //　load materials
 async function loadMaterials() {
-    const response = await fetch('../compound/obs_standard_min.json')
+    const response = await fetch('../compound/extended.json')
     const data = await response.json()
     if (!data.material || !Array.isArray(data.material)) {
         return []
